@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "http://alao.github.io/fashion_house_app",
+  "homepage": "http://alao.github.io/mern_fashion_house_app/",
   "scripts": {
     "start": "node server.js",
     "build": "react-scripts build",
