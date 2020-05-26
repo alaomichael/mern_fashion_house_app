@@ -105,10 +105,6 @@ class ShowTodo extends Component {
                         <table className="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td> Username: </td>
-                                    <td> { this.state.username }</td>
-                                </tr>
-                                <tr>
                                     <td> Name: </td>
                                     <td> { this.state.name }</td>
                                 </tr>

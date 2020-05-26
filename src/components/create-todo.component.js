@@ -305,24 +305,7 @@ class CreateList extends Component {
                     <ModalBody>
                         <Form onSubmit={ this.onSubmit }  >
                             <FormGroup>
-                                <div className="form-group">
-                                    <label>Username: </label>
-                                    <select ref="userInput"
-                                        required
-                                        className="form-control"
-                                        value={ this.state.username }
-                                        onChange={ this.onChangeUsername }>
-                                        {
-                                            this.state.users.map(function (user) {
-                                                return <option
-                                                    key={ user }
-                                                    value={ user }>{ user }
-                                                </option>;
-                                            })
-                                        }
-                                    </select>
-                                </div>
-                                <Label for='item'>*Name: </Label>
+                                                             <Label for='item'>*Name: </Label>
                                 <Input
                                     type='text'
                                     name='name'

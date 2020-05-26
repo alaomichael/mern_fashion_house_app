@@ -15,7 +15,7 @@ import moment from 'moment'
 const Todo = props => (
     <>
         <tr>
-            <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.username }</td>
+            <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.todo_responsible }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.name }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.phone }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.email }</td>
