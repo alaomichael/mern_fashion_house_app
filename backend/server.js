@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 // Route setup
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 let Todo = require('./models/todo.model');
