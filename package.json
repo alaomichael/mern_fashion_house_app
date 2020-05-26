@@ -1,8 +1,8 @@
 {
-  "name": "fashion_house_app",
+  "name": "mern_fashion_house_app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://alaomichael.github.io/",
+  "homepage": "http://alaomichael.github.io/mernfashionhouseapp",
   "dependencies": {
     "@google-cloud/storage": "^4.7.0",
     "antd": "^4.2.0",
