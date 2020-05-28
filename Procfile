@@ -1,1 +1,1 @@
-web: node server.js ./node_modules/.bin/forever -m 5 index.js
+web: npm run start ./node_modules/.bin/forever -m 5 index.js
