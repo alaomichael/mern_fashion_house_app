@@ -13,19 +13,21 @@ const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 
 const db = process.env.MONGODB_URL || LOCALDB;
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(db, {
-            useUnifiedTopology: true,
-            useCreateIndex: true,
-            useNewUrlParser: true
-        });
-        console.log("MongoDB is Connected...");
-    } catch (err) {
-        console.error(err.message);
-        process.exit(1);
-    }
-};
+// Connect Mongoose database
+
+// const connectDB = async () => {
+//     try {
+//         await mongoose.connect(db, {
+//             useUnifiedTopology: true,
+//             useCreateIndex: true,
+//             useNewUrlParser: true
+//         });
+//         console.log("MongoDB is Connected...");
+//     } catch (err) {
+//         console.error(err.message);
+//         process.exit(1);
+//     }
+// };
 
 // const MongoClient = require('mongodb').MongoClient;
 
@@ -45,10 +47,10 @@ let User = require('./models/user.model');
 //const usersRouter = require('./routes/users');
 
 // cors origin URL - Allow inbound traffic from origin
-corsOptions = {
-    origin: "https://clothmeasurement.herokuapp.com",
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// let corsOptions = {
+//     origin: "https://clothmeasurement.herokuapp.com",
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
 
 // let whitelist = ['https://clothmeasurement.herokuapp.com', 'https://clothmeasurementapp.netlify.app']
 // let corsOptions = {
@@ -61,9 +63,9 @@ corsOptions = {
 //     }
 // }
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
-//app.use(cors());
+app.use(cors());
 app.use(bodyParser.json());
 
 // Offline Database
@@ -75,11 +77,11 @@ app.use(bodyParser.json());
 
 
 //Online database
-// mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-// const connection = mongoose.connection;
-// connection.once('open', function () {
-//     console.log("MongoDB database connection established successfully");
-// })
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+const connection = mongoose.connection;
+connection.once('open', function () {
+    console.log("MongoDB database connection established successfully");
+})
 
 //Allow all requests from all domains & localhost
 todoRoutes.all('/*', function (req, res, next) {
