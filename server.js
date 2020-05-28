@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const helmet = require('helmet');
+
+app.use(helmet());
+
 const config = require('config');
 // DB Config
 //const db = config.get('mongoURI');
@@ -11,7 +15,7 @@ const config = require('config');
 const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 
-const db = process.env.MONGODB_URL || LOCALDB;
+const db = process.env.MONGODB_URI || MONGODB_URI;
 
 // Connect Mongoose database
 
