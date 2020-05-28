@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 
 
 //Online database
-mongoose.connect(URI, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection established successfully");
