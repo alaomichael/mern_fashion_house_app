@@ -45,21 +45,21 @@ let User = require('./models/user.model');
 //const usersRouter = require('./routes/users');
 
 // cors origin URL - Allow inbound traffic from origin
-// corsOptions = {
-//     origin: "https://clothmeasurement.herokuapp.com/",
-//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
+corsOptions = {
+    origin: "https://clothmeasurement.herokuapp.com",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-let whitelist = ['https://clothmeasurement.herokuapp.com', 'https://clothmeasurementapp.netlify.app']
-let corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
-}
+// let whitelist = ['https://clothmeasurement.herokuapp.com', 'https://clothmeasurementapp.netlify.app']
+// let corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1 || !origin) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error('Not allowed by CORS'))
+//         }
+//     }
+// }
 
 app.use(cors(corsOptions));
 
