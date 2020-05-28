@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const config = require('config');
+// DB Config
+const db = config.get('mongoURI');
+
 // const MongoClient = require('mongodb').MongoClient;
 
 // << db setup >>
@@ -14,7 +18,6 @@ const mongoose = require('mongoose');
 // Route setup
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
-const PORT = process.env.PORT || 4000;
 const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 let Todo = require('./models/todo.model');
@@ -34,7 +37,7 @@ app.use(bodyParser.json());
 
 
 //Online database
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection established successfully");
@@ -171,6 +174,9 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
 }
+
+
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, function () {
     console.log("Server is running on Port: " + PORT);
