@@ -16,7 +16,7 @@ const config = require('config');
 const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 
-const db = process.env.MONGODB_URI || MONGODB_URI;
+const db = process.env.MONGOLAB_PURPLE_URI || MONGODB_URI;
 
 // Connect Mongoose database
 
