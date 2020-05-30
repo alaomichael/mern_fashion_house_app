@@ -9,15 +9,13 @@ const helmet = require('helmet');
 
 app.use(helmet());
 
-const config = require('config');
+//const config = require('config');
 // DB Config
 //const db = config.get('mongoURI');
 
 //const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
-//const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
-
-//const db = process.env.MONGODB_URI || MONGODB_URI;
+// const db = process.env.MONGOLAB_PURPLE_URI || MONGODB_URI;
 
 // Connect Mongoose database
 
@@ -84,7 +82,7 @@ app.use(bodyParser.json());
 
 //Online database
 mongoose.connect(
-    process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fha', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+    process.env.MONGOLAB_PURPLE_URI || 'mongodb://127.0.0.1:27017/fha', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection established successfully");
