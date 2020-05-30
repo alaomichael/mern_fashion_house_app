@@ -62,7 +62,7 @@ class EditTodo extends Component {
         }
     }
     componentDidMount() {
-        axios.get('http://localhost:4000/todos/' + this.props.match.params.id)
+        axios.get('https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     username: response.data.username,
