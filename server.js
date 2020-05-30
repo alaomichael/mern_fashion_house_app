@@ -13,7 +13,7 @@ app.use(helmet());
 // DB Config
 //const db = config.get('mongoURI');
 
-//const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 // const db = process.env.MONGOLAB_PURPLE_URI || MONGODB_URI;
 
@@ -82,7 +82,7 @@ app.use(bodyParser.json());
 
 //Online database
 mongoose.connect(
-    process.env.MONGOLAB_PURPLE_URI || 'mongodb://127.0.0.1:27017/fha', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+    process.env.MONGOLAB_PURPLE_URI || process.env.MONGODB_URI || MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection established successfully");
