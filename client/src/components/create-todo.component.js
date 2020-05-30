@@ -242,7 +242,7 @@ class CreateList extends Component {
             users: this.state.users
         };
 
-        axios.post('http://localhost:4000/todos/add', newTodo)
+        axios.post('https://clothmeasurement.herokuapp.com/todos/add', newTodo)
             .then(res => console.log(res.data));
 
         // Close modal
