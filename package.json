@@ -19,6 +19,7 @@
   "author": "Alao Michael",
   "license": "MIT",
   "dependencies": {
+    "algoliasearch": "^4.2.0",
     "body-parser": "^1.19.0",
     "concurrently": "^3.6.1",
     "config": "^3.3.1",
@@ -27,6 +28,7 @@
     "express": "^4.17.1",
     "forever": "^3.0.0",
     "helmet": "^3.22.0",
-    "mongoose": "^5.9.16"
+    "mongoose": "^5.9.16",
+    "react-instantsearch-dom": "^6.5.0"
   }
 }

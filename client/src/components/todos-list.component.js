@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import moment from 'moment'
-
+import Search from './Search'
 
 
 // Todo functional Component, that is passed into TodosList Class Component
@@ -117,6 +117,8 @@ class TodosList extends Component {
         const { auth } = this.props;
         if (!auth.uid) return <Redirect to='/signin' />
         return (
+            <>
+                <Search />
             <div>
                 <h3>Measurement List</h3>
                 <table className="table table-striped"
@@ -135,6 +137,7 @@ class TodosList extends Component {
                     </tbody>
                 </table>
             </div>
+            </>
         )
     }
 }

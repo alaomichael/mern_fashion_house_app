@@ -19,6 +19,7 @@
 .env.production.local
 .env
 .env.sh
+/request.http
 
 npm-debug.log*
 yarn-debug.log*

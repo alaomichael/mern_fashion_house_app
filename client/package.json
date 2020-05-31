@@ -6,6 +6,7 @@
   "proxy": "http://localhost:3000",
   "dependencies": {
     "@google-cloud/storage": "^4.7.0",
+    "algoliasearch": "^4.2.0",
     "antd": "^4.2.0",
     "axios": "^0.19.1",
     "bootstrap": "^4.4.1",
@@ -26,6 +27,7 @@
     "react-dom": "^16.9.0",
     "react-firebase-file-uploader": "^2.4.3",
     "react-images-upload": "^1.2.8",
+    "react-instantsearch-dom": "^6.5.0",
     "react-materialize": "^3.9.0",
     "react-redux": "^5.1.1",
     "react-redux-firebase": "^2.2.4",
