@@ -72,7 +72,7 @@ class TodosList extends Component {
 
 
         // Get Username
-        axios.get('http://localhost:4000/users/')
+        axios.get('https://clothmeasurement.herokuapp.com/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -91,7 +91,7 @@ class TodosList extends Component {
         // Delete Button Link
         let onDeleteClick;
         onDeleteClick = _id => {
-            axios.delete('http://localhost:4000/todos/delete/' + _id)
+            axios.delete('https://clothmeasurement.herokuapp.com/todos/delete/' + _id)
                 .then(res => console.log(res.data));
             this.setState({
                 exercises: this.state.todos.filter(el => el._id !== _id)

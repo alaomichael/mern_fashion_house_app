@@ -40,7 +40,7 @@ class ShowTodo extends Component {
     componentDidMount() {
 
 
-        // axios.get('http://localhost:4000/users/')
+        // axios.get('https://clothmeasurement.herokuapp.com/users/')
         //     .then(response => {
         //         if (response.data.length > 0) {
         //             this.setState({
