@@ -5,24 +5,26 @@ import { Button } from 'reactstrap';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import moment from 'moment'
-
+import Search from './Search'
+//import Posts from './Posts'
+import Pagination from './Pagination'
 
 
 // Todo functional Component, that is passed into TodosList Class Component
 //  A link to delete todo item
 // <a href="#" onClick={props.onDeleteClick.bind(this,props.todo._id) }>Delete</a>
 
-const Todo = props => (
-    <>
-        <tr>
-            <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.todo_responsible }</td>
+const Todo = (props) => (
+    
+      <>
+         <tr>
+           <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.todo_responsible }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.name }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.phone }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.email }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>
                 <img src={ props.todo.url || props.todo.image || 'https://via.placeholder.com/150' } alt="Uploaded Style" height="150" width="150" />
-            </td>
-
+            </td>            
             <td>{ moment(props.todo.date).fromNow() }</td>
             <Link to={ "/show/" + props.todo._id }>
                 <Button
@@ -40,24 +42,31 @@ const Todo = props => (
                 onClick={ props.onDeleteClick.bind(this, props.todo._id) } >Delete</Button>
 
         </tr>
-    </>
+    </> 
 )
+
 
 class TodosList extends Component {
 
     constructor(props) {
         super(props);
         //this.deleteExercise = this.deleteExercise.bind(this);
+
+        const {auth} = this.props;
+        const owneremail = auth.email;
+        
         this.state = {
             todos: [],
             username: '',
-            users: []
+            users: [],
+            loading: false,
+            currentPage: 1,
+            todosPerPage: 5,
+            owneremail:owneremail
         };
-        console.log(props);
-
-
+        console.log(this.state);
     }
-
+    
     componentDidMount() {
         axios.get('https://clothmeasurement.herokuapp.com/todos/')
             .then(response => {
