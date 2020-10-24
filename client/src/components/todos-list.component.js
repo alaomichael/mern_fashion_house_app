@@ -63,8 +63,9 @@ class TodosList extends Component {
         axios.get('https://clothmeasurement.herokuapp.com/todos/')
             .then(response => {
                 this.setState({
-                    todos: response.data,
-                    username: response.data.username
+                     todos: response.data,
+                    username: response.data.username,
+                    users: response.data.users
                 });
             })
             .catch(function (error) {
