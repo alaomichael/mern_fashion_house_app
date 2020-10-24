@@ -6,13 +6,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import moment from 'moment'
 import Search from './Search'
-//import Posts from './Posts'
 import Pagination from './Pagination'
-
-
-// Todo functional Component, that is passed into TodosList Class Component
-//  A link to delete todo item
-// <a href="#" onClick={props.onDeleteClick.bind(this,props.todo._id) }>Delete</a>
 
 const Todo = (props) => (
     
@@ -50,8 +44,6 @@ class TodosList extends Component {
 
     constructor(props) {
         super(props);
-        //this.deleteExercise = this.deleteExercise.bind(this);
-
         const {auth} = this.props;
         const owneremail = auth.email;
         
@@ -97,6 +89,12 @@ class TodosList extends Component {
     }
 
     todoList() {
+        // Pagination props
+         const { currentPage, todosPerPage, loading,todos } = this.state;
+        const indexOfLastTodo = currentPage * todosPerPage;
+        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+        const currentTodos = todos.slice(indexOfFirstTodo, indexOfLastTodo);
+        
         // Delete Button Link
         let onDeleteClick;
         onDeleteClick = _id => {
@@ -141,16 +139,17 @@ class TodosList extends Component {
                     </thead>
                     <tbody>
                         { this.todoList() }
+       <Pagination todosPerPage={ todosPerPage } totalTodos={ this.state.todos.length } paginate={ paginate } />
                     </tbody>
                 </table>
             </div>
         )
     }
 }
-
 const mapStateToProps = (state) => {
     return {
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        owneremail: state.firebase.auth.email
     }
 }
 
