@@ -120,9 +120,21 @@ class TodosList extends Component {
     }
 
     render() {
+        
+         const { auth,todos } = this.props; 
+           
+       if (!auth.uid) return <Redirect to='/signin' />
 
-        const { auth } = this.props;
-        if (!auth.uid) return <Redirect to='/signin' />
+        const { currentPage, todosPerPage, loading} = this.state;
+        const indexOfLastTodo = currentPage * todosPerPage;
+        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+        const currentTodos = this.state.todos.slice(indexOfFirstTodo, indexOfLastTodo);
+
+        // Change page
+        const paginate = pageNumber => this.setState({
+            currentPage: pageNumber
+        });
+
         return (
             <div>
                 <h3>Measurement List</h3>
