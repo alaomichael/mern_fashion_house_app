@@ -3,13 +3,12 @@ import TodosList from "./components/todos-list.component";
 import 'bootstrap/dist/css/bootstrap.css';
 import ShowTodo from "./components/show-todo.component";
 import Navbar from "./components/navbar.component"
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React, {useState, useEffect } from 'react';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import EditTodo from './components/edit-todo.component';
 import CreateUser from './components/create-user.components';
-
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
 
