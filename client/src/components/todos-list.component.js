@@ -5,7 +5,6 @@ import { Button } from 'reactstrap';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import moment from 'moment'
-import Search from './Search'
 import Pagination from './Pagination'
 
 const Todo = (props) => (
