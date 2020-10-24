@@ -35,13 +35,13 @@ const SignedInLinks = (props) => {
       <ul className="navbar-nav mr-auto">
         <li> <Link to="/" className="navbar-brand brand-logo">Measurement App</Link></li>
         <li className="navbar-item">
-          <Link to="/user" className="nav-link">Create User</Link>
+          <Link to="/user" className="nav-link">Add User</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/create" className="nav-link">Create Customer Data</Link>
+          <Link to="/create" className="nav-link">Add Customer Data</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/" className="nav-link">Customers Data</Link>
+          <Link to="/" className="nav-link">Show Customers Data</Link>
         </li>
         <li><Link className="nav-link" onClick={ props.signOut }>
           Log Out
