@@ -74,15 +74,13 @@ class TodosList extends Component {
             .then(response => {                
                 console.log(response.data);
                 console.log(firebaseuser);
-                if (owner) {
+               
 this.setState({
                     todos: response.data,
                     username: response.data.username,
                     users: response.data.users
                    });
-                } else {
-                    return null;
-                }
+             
                 
             })
             .catch(function (error) {
