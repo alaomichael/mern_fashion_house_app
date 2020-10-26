@@ -43,6 +43,7 @@ class TodosList extends Component {
 
     constructor(props) {
         super(props);
+        
         const {auth} = this.props;
         const owneremail = auth.email;
         
@@ -57,15 +58,32 @@ class TodosList extends Component {
         };
         console.log(this.state);
     }
-    
+
+    getData = () => {
+    let data = localStorage.getItem('myData');
+    data = JSON.parse(data);
+    console.log(data.owneremail);
+}
+
+
     componentDidMount() {
+        const owner = this.state.owneremail;
+        const firebaseuser = this.props.auth.email;
+       
         axios.get('https://clothmeasurement.herokuapp.com/todos/')
-            .then(response => {
-                this.setState({
-                     todos: response.data,
+            .then(response => {                
+                console.log(response.data);
+                console.log(firebaseuser);
+                if (owner === firebaseuser) {
+this.setState({
+                    todos: response.data,
                     username: response.data.username,
                     users: response.data.users
-                });
+                   });
+                } else {
+                    return null;
+                }
+                
             })
             .catch(function (error) {
                 console.log(error);
@@ -73,7 +91,7 @@ class TodosList extends Component {
 
 
         // Get Username
-        axios.get('https://clothmeasurement.herokuapp.com/users/')
+        axios.get( 'http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -85,17 +103,18 @@ class TodosList extends Component {
                 console.log(error);
             })
 
+        // Get localstorage
+        this.getData();
 
     }
 
     todoList() {
-        // Pagination props
-         const { currentPage, todosPerPage, loading,todos } = this.state;
+        const { currentPage, todosPerPage, loading,todos } = this.state;
         const indexOfLastTodo = currentPage * todosPerPage;
         const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
         const currentTodos = todos.slice(indexOfFirstTodo, indexOfLastTodo);
-        
-        // Delete Button Link
+
+     // Delete Button Link
         let onDeleteClick;
         onDeleteClick = _id => {
             axios.delete('https://clothmeasurement.herokuapp.com/todos/delete/' + _id)
@@ -108,20 +127,24 @@ class TodosList extends Component {
             window.location = '/';
         };
 
-        return this.state.todos.map(function (currentTodo, i, _id) {
+       return currentTodos.map(function (currentTodo, i, _id) {
 
             return <Todo todo={ currentTodo }
                 key={ i }
                 id={ _id }
                 onDeleteClick={ onDeleteClick }
+                 loading={loading}
             />;
 
         })
+
+
+        
     }
 
     render() {
-        
-         const { auth,todos } = this.props; 
+       
+       const { auth,todos } = this.props; 
            
        if (!auth.uid) return <Redirect to='/signin' />
 
@@ -136,6 +159,7 @@ class TodosList extends Component {
         });
 
         return (
+            <>
             <div>
                 <h3>Measurement List</h3>
                 <table className="table table-striped"
@@ -151,13 +175,18 @@ class TodosList extends Component {
                     </thead>
                     <tbody>
                         { this.todoList() }
-       <Pagination todosPerPage={ todosPerPage } totalTodos={ this.state.todos.length } paginate={ paginate } />
+                        
+             <Pagination todosPerPage={ todosPerPage } totalTodos={ this.state.todos.length } paginate={ paginate } />
+            
                     </tbody>
                 </table>
             </div>
+           
+        </>
         )
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
