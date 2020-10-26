@@ -46,7 +46,10 @@ class TodosList extends Component {
 
     constructor(props) {
         super(props);
-        //this.deleteExercise = this.deleteExercise.bind(this);
+        
+        const {auth} = this.props;
+        const owneremail = auth.email;
+        
         this.state = {
             todos: [],
             username: '',
