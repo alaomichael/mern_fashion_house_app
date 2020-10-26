@@ -7,9 +7,10 @@ import { Redirect } from 'react-router-dom';
 import moment from 'moment'
 import Pagination from './Pagination'
 
+
 const Todo = (props) => (
     
-      <>
+       <>
          <tr>
            <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.todo_responsible }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.name }</td>
@@ -17,7 +18,9 @@ const Todo = (props) => (
             <td className={ props.todo.todo_completed ? 'completed' : '' }>{ props.todo.email }</td>
             <td className={ props.todo.todo_completed ? 'completed' : '' }>
                 <img src={ props.todo.url || props.todo.image || 'https://via.placeholder.com/150' } alt="Uploaded Style" height="150" width="150" />
-            </td>            
+            </td>
+            <td>{props.todo.phone}</td>
+
             <td>{ moment(props.todo.date).fromNow() }</td>
             <Link to={ "/show/" + props.todo._id }>
                 <Button
@@ -35,7 +38,7 @@ const Todo = (props) => (
                 onClick={ props.onDeleteClick.bind(this, props.todo._id) } >Delete</Button>
 
         </tr>
-    </> 
+    </>
 )
 
 
@@ -43,10 +46,7 @@ class TodosList extends Component {
 
     constructor(props) {
         super(props);
-        
-        const {auth} = this.props;
-        const owneremail = auth.email;
-        
+        //this.deleteExercise = this.deleteExercise.bind(this);
         this.state = {
             todos: [],
             username: '',
@@ -54,35 +54,32 @@ class TodosList extends Component {
             loading: false,
             currentPage: 1,
             todosPerPage: 5,
-            owneremail:owneremail
+            owneremail: owneremail
         };
-        console.log(this.state);
+            
+            
+        console.log(props);
     }
 
     getData = () => {
     let data = localStorage.getItem('myData');
     data = JSON.parse(data);
-    console.log(data.owneremail);
+    console.log(data);
 }
 
 
     componentDidMount() {
-        const owner = this.state.owneremail;
+         const owner = this.state.owneremail;
         const firebaseuser = this.props.auth.email;
-       
+        console.log(owner);
+        console.log(firebaseuser);
         axios.get('https://clothmeasurement.herokuapp.com/todos/')
-            .then(response => {  
-            
-             if (response.data.length > 0) {
-                               
-this.setState({
+            .then(response => {
+                this.setState({
                     todos: response.data,
                     username: response.data.username,
                     users: response.data.users
-                   });  }
-            else {
-            return <Redirect to='/signin' />
-            }
+                   });
             })
             .catch(function (error) {
                 console.log(error);
@@ -90,7 +87,7 @@ this.setState({
 
 
         // Get Username
-        axios.get('https://clothmeasurement.herokuapp.com/users/')
+        axios.get( 'http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -113,7 +110,7 @@ this.setState({
         const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
         const currentTodos = todos.slice(indexOfFirstTodo, indexOfLastTodo);
 
-     // Delete Button Link
+         // Delete Button Link
         let onDeleteClick;
         onDeleteClick = _id => {
             axios.delete('https://clothmeasurement.herokuapp.com/todos/delete/' + _id)
@@ -126,7 +123,7 @@ this.setState({
             window.location = '/';
         };
 
-       return currentTodos.map(function (currentTodo, i, _id) {
+          return currentTodos.map(function (currentTodo, i, _id) {
 
             return <Todo todo={ currentTodo }
                 key={ i }
@@ -143,8 +140,7 @@ this.setState({
 
     render() {
        
-       const { auth,todos } = this.props; 
-           
+       const { auth,todos } = this.props;       
        if (!auth.uid) return <Redirect to='/signin' />
 
         const { currentPage, todosPerPage, loading} = this.state;
@@ -176,7 +172,6 @@ this.setState({
                         { this.todoList() }
                         
              <Pagination todosPerPage={ todosPerPage } totalTodos={ this.state.todos.length } paginate={ paginate } />
-            
                     </tbody>
                 </table>
             </div>
@@ -185,6 +180,7 @@ this.setState({
         )
     }
 }
+
 
 const mapStateToProps = (state) => {
     return {
