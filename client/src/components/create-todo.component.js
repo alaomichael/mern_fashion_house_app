@@ -24,7 +24,7 @@ import firebase from 'firebase';
 // const algoliasearch = require('algoliasearch');
 
 // For the default version
-import algoliasearch from 'algoliasearch';
+//import algoliasearch from 'algoliasearch';
 
 // For the search only version
 //import algoliasearch from 'algoliasearch/lite';
@@ -33,8 +33,8 @@ import algoliasearch from 'algoliasearch';
 // ALGOLIASEARCH_API_KEY_SEARCH = 107c357448ef5abcbe25148fa6ed2628
 // ALGOLIASEARCH_APPLICATION_ID = DDIJI46JBP
 
-const client = algoliasearch(process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY);
-const index = client.initIndex('customer_data');
+//const client = algoliasearch(process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY);
+//const index = client.initIndex('customer_data');
 
 
 
@@ -261,21 +261,15 @@ getSessionData = () => {
             owneremail:this.state.owneremail
         };
 
-        const objects = [{
-            firstname: 'Jimmie',
-            lastname: 'Barninger'
-        }, {
-            firstname: 'Warren',
-            lastname: 'Speach'
-        }];
+      
 
 // const index = 'prod_NAME';
 
-        index
-            .saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
-            .then(({ objectIDs }) => {
-                console.log(objectIDs);
-            });
+       // index
+        //    .saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
+        //    .then(({ objectIDs }) => {
+       //         console.log(objectIDs);
+       //     });
 
 // Set localstorage
             this.setData(newTodo);
@@ -496,6 +490,7 @@ getSessionData = () => {
 
                                 <div className="form-group">
                                     <Label for='image'>Style:  </Label>
+            <p> <b>Please ensure the picture you are uploading show before you submit the form!</b> </p>
                                 </div>
                                 { this.state.image && <img src={ this.state.url } height="100" width="100" /> }
                                 <br />
