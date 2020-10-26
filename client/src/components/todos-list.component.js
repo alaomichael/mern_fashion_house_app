@@ -71,17 +71,12 @@ class TodosList extends Component {
         const firebaseuser = this.props.auth.email;
        
         axios.get('https://clothmeasurement.herokuapp.com/todos/')
-            .then(response => {                
-                console.log(response.data);
-                console.log(firebaseuser);
-               
+            .then(response => {               
 this.setState({
                     todos: response.data,
                     username: response.data.username,
                     users: response.data.users
-                   });
-             
-                
+                   });             
             })
             .catch(function (error) {
                 console.log(error);
@@ -89,7 +84,7 @@ this.setState({
 
 
         // Get Username
-        axios.get( 'http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/')
+        axios.get('https://clothmeasurement.herokuapp.com/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
