@@ -12,8 +12,6 @@ app.use(helmet());
 // DB Config
 //const db = config.get('mongoURI');
 
-const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
-
 // Route setup
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
@@ -105,28 +103,6 @@ class APIfeatures {
 }
 
 // Customer Data Route
-
-// todoRoutes.get('/' , async (req,res) => {
-//     try {
-//     const features = new APIfeatures(Todos.find(), req.query)
-//     .filtering()
-//     .sorting();
-//.paginating();
-//     const todos = await features.query;
-//     res.status(200).json({
-//         status: 'success',
-//         results: todos.length,
-//         data: {
-//             todos
-//         }
-//     });
-//     } catch (e) {
-//     res.status(404).json({
-//         status:'fail',
-//         message: e
-//     });
-//     }
-// });
 
 todoRoutes.route('/').get(function (req, res) {
     const query = req.query;
