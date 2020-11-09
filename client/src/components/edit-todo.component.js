@@ -62,7 +62,7 @@ class EditTodo extends Component {
         }
     }
     componentDidMount() {
-        axios.get('https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
+        axios.get( 'http://localhost:5000/todos' || 'https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     username: response.data.username,
@@ -96,7 +96,7 @@ class EditTodo extends Component {
             })
 
         // Get Username
-        axios.get('https://clothmeasurement.herokuapp.com/users/')
+        axios.get( 'http://localhost:5000/users' || 'https://clothmeasurement.herokuapp.com/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -126,6 +126,19 @@ class EditTodo extends Component {
 
         this.toggle();
 
+    }
+
+// To show image upload progress
+    handleUploadStart = () => {
+        this.setState({
+            progress: 0
+        })
+    }
+
+    handleProgress = progress => {
+        this.setState({
+            progress: progress
+        })
     }
 
     //To show uploaded style
@@ -245,7 +258,7 @@ class EditTodo extends Component {
             todo_completed: this.state.todo_completed
         };
         console.log(obj);
-        axios.post('https://clothmeasurement.herokuapp.com/todos/update/' + this.props.match.params.id, obj)
+        axios.post( 'http://localhost:5000/todos/update/' || 'https://clothmeasurement.herokuapp.com/todos/update/' + this.props.match.params.id, obj)
             .then(res => console.log(res.data));
         // Open the Homepage   
         window.location = '/';
@@ -412,13 +425,19 @@ class EditTodo extends Component {
                                 <div className="form-group">
                                     <Label for='image'>Style:  </Label>
                                 </div>
-                                { this.state.image && <img src={ this.state.url } height="150" width="150" /> }
+                                { this.state.image && <img src={ this.state.url } height="150" width="150" alt="cloth_style" /> }
+                                <br />
+                                <label>Progress: </label>
+                                <p>                 { this.state.progress }</p>
+                                <br />
                                 <br />
                                 <FileUploader
                                     accept="image/*"
                                     name="image"
                                     storageRef={ firebase.storage().ref('avatars') }
+                                    onUploadStart={ this.handleUploadStart }
                                     onUploadSuccess={ this.handleUploadSuccess }
+                                    onProgress={ this.handleProgress }
                                 />
 
                                 <div className="form-group">
