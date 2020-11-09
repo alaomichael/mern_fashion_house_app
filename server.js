@@ -8,31 +8,30 @@ require('dotenv').config();
 const helmet = require('helmet');
 
 app.use(helmet());
+//const config = require('config');
+// DB Config
+//const db = config.get('mongoURI');
+
+const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 // Route setup
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
 
+const LOCALDB = 'mongodb://127.0.0.1:27017/mernfashionapp';
 let Todo = require('./models/todo.model');
 let User = require('./models/user.model');
 
+//app.use(cors(corsOptions));
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Offline Database
-// mongoose.connect('mongodb://127.0.0.1:27017/fha', { useNewUrlParser: true, useCreateIndex: true });
-// const connection = mongoose.connection;
-// connection.once('open', function() {
-// console.log("MongoDB database connection established successfully");
-// })
-
-
-//Online database
-mongoose.connect( process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+// Offline and Online database
+mongoose.connect(process.env.MONGOLAB_URI || LOCALDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
-    console.log("MongoDB database connection established successfully");
+    console.log("MongoDB database connection is established successfully");
 })
 
 //Allow all requests from all domains & localhost
@@ -68,9 +67,82 @@ userRoutes.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//Advance Filtering & Pagination
+
+class APIfeatures {
+    constructor(query, queryString) {
+        this.query = query;
+        this.queryString = queryString;
+    }
+    filtering() {
+        const queryobj = { ...this.queryString };
+        console.log(queryobj);
+        const excludedfields = ['page', 'sort', 'limit'];
+        excludedfields.forEach(el => delete queryobj[el]); // DELETE from queryString
+        let querystr = JSON.stringify(queryobj);
+        console.log(querystr);
+        querystr = querystr.replace(/\b(gte|gt|lt|lte)\b/g, match => `$${match}`);
+        console.log(querystr);
+        this.query.find(JSON.parse(querystr));
+        return this;
+    }
+    sorting() {
+        if (this.queryString.sort) {
+            const sortby = this.queryString.sort.split(',').join(' ');
+            this.query = this.query.sort(sortby);
+        } else {
+            this.query = this.query.sort('-createdAt');
+        }
+        return this;
+    }
+    paginating() {
+        const page = this.queryString.page * 1 || 1;
+        const limit = this.queryString.limit * 1 || 4;
+        const skip = (page - 1) * limit;
+        this.query = this.query.skip(skip).limit(limit);
+        return this;
+    }
+}
+
 // Customer Data Route
+
+// todoRoutes.get('/' , async (req,res) => {
+//     try {
+//     const features = new APIfeatures(Todos.find(), req.query)
+//     .filtering()
+//     .sorting();
+//.paginating();
+//     const todos = await features.query;
+//     res.status(200).json({
+//         status: 'success',
+//         results: todos.length,
+//         data: {
+//             todos
+//         }
+//     });
+//     } catch (e) {
+//     res.status(404).json({
+//         status:'fail',
+//         message: e
+//     });
+//     }
+// });
+
 todoRoutes.route('/').get(function (req, res) {
-    Todo.find(function (err, todos) {
+    const query = req.query;
+    Todo.find(query, function (err, todos) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(todos);
+        }
+    });
+});
+
+todoRoutes.route('/?').get(function (req, res) {
+    const query = req.query;
+    console.log(query);
+    Todo.find(query, function (err, todos) {
         if (err) {
             console.log(err);
         } else {
@@ -81,6 +153,7 @@ todoRoutes.route('/').get(function (req, res) {
 
 todoRoutes.route('/:id').get(function (req, res) {
     let id = req.params.id;
+    // console.log(id);
     Todo.findById(id, function (err, todo) {
         res.json(todo);
     });
@@ -102,7 +175,6 @@ todoRoutes.route('/delete/:id').delete(function (req, res) {
         res.status(400).send("Customer Deleted");
     });
 });
-
 
 todoRoutes.route('/update/:id').post(function (req, res) {
     Todo.findById(req.params.id, function (err, todo) {
@@ -166,11 +238,9 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
 }
-
-
+// process.env.PORT || 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, function () {
     console.log("Server is running on Port: " + PORT);
 });
-
