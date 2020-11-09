@@ -53,7 +53,7 @@ class ShowTodo extends Component {
         //         console.log(error);
         //     })
 
-        axios.get('https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
+        axios.get('http://localhost:5000/todos' || 'https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     username: response.data.username,
@@ -189,7 +189,7 @@ class ShowTodo extends Component {
                                 <tr>
                                     <td> Style: </td>
                                     <td>  <div><a href={ this.state.url }>
-                                        { this.state.image && <img src={ this.state.url } height="150" width="150" /> }</a>
+                                        { this.state.image && <img src={ this.state.url } height="150" width="150" alt="cloth_style" /> }</a>
                                     </div></td>
                                 </tr>
                                 <tr>
