@@ -26,7 +26,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Offline and Online database
-mongoose.connect(process.env.MONGOLAB_URI || LOCALDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI || LOCALDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection is established successfully");
