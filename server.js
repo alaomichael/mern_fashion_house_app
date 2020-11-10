@@ -102,29 +102,29 @@ class APIfeatures {
     }
 }
 
-// Customer Data Route
 
+//Home Route
 todoRoutes.route('/').get(function (req, res) {
-    const query = req.query;
+    let query = req.query;
     Todo.find(query, function (err, todos) {
         if (err) {
             console.log(err);
         } else {
             res.json(todos);
         }
-    });
+    }).sort({ name : 1 });
 });
 
-todoRoutes.route('/?').get(function (req, res) {
+// Customer List Route
+todoRoutes.route('/list').get(function (req, res) {
     const query = req.query;
-    console.log(query);
     Todo.find(query, function (err, todos) {
         if (err) {
             console.log(err);
         } else {
             res.json(todos);
         }
-    });
+    }).sort({ date : -1 });
 });
 
 todoRoutes.route('/:id').get(function (req, res) {
@@ -135,14 +135,14 @@ todoRoutes.route('/:id').get(function (req, res) {
     });
 });
 
-// Just editted in case of any error
+// Show list Route
 todoRoutes.route('/show/:id').get(function (req, res) {
     let id = req.params.id;
     Todo.findById(id, function (err, todo, user) {
         res.json(todo, user);
     });
 });
-
+//Delete Route
 todoRoutes.route('/delete/:id').delete(function (req, res) {
     let id = req.params.id;
     Todo.findByIdAndDelete(id, function (err, todo) {
@@ -152,6 +152,7 @@ todoRoutes.route('/delete/:id').delete(function (req, res) {
     });
 });
 
+// Update Route
 todoRoutes.route('/update/:id').post(function (req, res) {
     Todo.findById(req.params.id, function (err, todo) {
         if (!todo)
@@ -191,6 +192,7 @@ todoRoutes.route('/update/:id').post(function (req, res) {
     });
 });
 
+// Add Measurement Route
 todoRoutes.route('/add').post(function (req, res) {
     let todo = new Todo(req.body);
     todo.save()
