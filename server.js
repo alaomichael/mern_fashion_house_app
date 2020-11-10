@@ -127,7 +127,7 @@ todoRoutes.route('/list').get(function (req, res) {
     }).sort({ date : -1 });
 });
 
-todoRoutes.route('/:id').get(function (req, res) {
+todoRoutes.route('/list/:id').get(function (req, res) {
     let id = req.params.id;
     // console.log(id);
     Todo.findById(id, function (err, todo) {
@@ -136,14 +136,14 @@ todoRoutes.route('/:id').get(function (req, res) {
 });
 
 // Show list Route
-todoRoutes.route('/show/:id').get(function (req, res) {
+todoRoutes.route('/list/show/:id').get(function (req, res) {
     let id = req.params.id;
     Todo.findById(id, function (err, todo, user) {
         res.json(todo, user);
     });
 });
 //Delete Route
-todoRoutes.route('/delete/:id').delete(function (req, res) {
+todoRoutes.route('/list/delete/:id').delete(function (req, res) {
     let id = req.params.id;
     Todo.findByIdAndDelete(id, function (err, todo) {
         res.json(todo);
