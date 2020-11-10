@@ -17,26 +17,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { storage } from '../config/firebaseConfig'
 import FileUploader from 'react-firebase-file-uploader';
 import firebase from 'firebase';
-//import ImageUpload from './imageUpload';
-//import algoliasearch from 'algoliasearch';
-
-// For the default version
-// const algoliasearch = require('algoliasearch');
-
-// For the default version
-import algoliasearch from 'algoliasearch';
-
-// For the search only version
-//import algoliasearch from 'algoliasearch/lite';
-
-// ALGOLIASEARCH_API_KEY= 086d662d9db57ab4d6626fc0185b390c
-// ALGOLIASEARCH_API_KEY_SEARCH = 107c357448ef5abcbe25148fa6ed2628
-// ALGOLIASEARCH_APPLICATION_ID = DDIJI46JBP
-
-const client = algoliasearch(process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY);
-const index = client.initIndex('customer_data');
-
-
 
 class CreateList extends Component {
 constructor(props) {
@@ -87,8 +67,7 @@ owneremail:this.props.owneremail
 
 componentDidMount() {
 this.toggle();
-// 'https://clothmeasurement.herokuapp.com/users/'
-
+   
 axios.get('http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/' )
 .then(response => {
 if (response.data.length > 0) {
@@ -272,11 +251,11 @@ owneremail:this.state.owneremail
 
 // const index = 'prod_NAME';
 
-index
-.saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
-.then(({ objectIDs }) => {
-console.log(objectIDs);
-});
+//index
+//.saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
+//.then(({ objectIDs }) => {
+//console.log(objectIDs);
+//});
 
 // Set localstorage
 this.setData(newTodo);
