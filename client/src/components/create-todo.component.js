@@ -314,7 +314,7 @@ window.location = '/';
 }
 render() {
 const { auth } = this.props;
-if (!auth.uid) return <Redirect to='/signin' />
+if (!auth.uid) return <Redirect to='/' />
 return (
 <div style={ { marginTop: 10 } }>
 <h4 align="center" >
