@@ -18,13 +18,13 @@ const Todo = (props) => (
 <img src={ props.todo.url || props.todo.image || 'https://via.placeholder.com/150' } alt="Uploaded Style" height="150" width="150" />
 </td>            
 <td>{ moment(props.todo.date).fromNow() }</td>
-<Link to={ "/show/" + props.todo._id }>
+<Link to={ "/list/show/" + props.todo._id }>
 <Button
 className="btn btn-success"
 >Show</Button>
 </Link>
 { ` | ` }
-<Link to={ "/edit/" + props.todo._id }>
+<Link to={ "/list/edit/" + props.todo._id }>
 <Button className='btn btn-primary'
 >Edit</Button>
 </Link>
