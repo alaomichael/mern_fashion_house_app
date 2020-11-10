@@ -73,7 +73,7 @@ initialTodos:[]
 componentDidMount() {
 const firebaseuser = this.props.auth.email;
 //const firebaseuser = "youremail@gmail.com";
-axios.get('http://localhost:5000/todos/?owneremail=' + firebaseuser)
+axios.get('http://localhost:5000/todos/list/?owneremail=' + firebaseuser)
 .then(response => {
 console.log(response.data);
 this.setState({
@@ -112,13 +112,13 @@ const currentTodos = initialTodos.length > todos.length ? (todos.slice(indexOfFi
 let onDeleteClick;
 onDeleteClick = _id => {
 //https://clothmeasurement.herokuapp.com
-axios.delete('http://localhost:5000/todos/delete/' + _id)
+axios.delete('http://localhost:5000/todos/list/delete/' + _id)
 .then(res => console.log(res.data));
 this.setState({
 exercises: this.state.todos.filter(el => el._id !== _id)
 })
 // Refresh the page to show the new list of todos after deleting 
-window.location = '/';
+window.location = '/list';
 };
 
 return currentTodos.map(function (currentTodo, i, _id) {
@@ -133,7 +133,7 @@ loading={loading}
 
 render() {
 const { auth } = this.props;
-if (!auth.uid) return <Redirect to='/signin' />
+if (!auth.uid) return <Redirect to='/' />
 // Change page
 const paginate = pageNumber => this.setState({
 currentPage: pageNumber
@@ -144,15 +144,8 @@ const indexOfLastTodo = currentPage * todosPerPage;
 const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
 const currentTodos = initialTodos.length > todos.length ? (todos.slice(indexOfFirstTodo, indexOfLastTodo)) : (initialTodos.slice(indexOfFirstTodo, indexOfLastTodo) );
 const handleRefresh = e => {
-window.location = '/';
+window.location = '/list';
 }
-
-// const handleOnBackClick = e => {
-// back();
-// }
-// const handleOnForwardClick = e => {
-// forward();
-// }
 
 const handleChange = e => {
 this.setState({word:e});
