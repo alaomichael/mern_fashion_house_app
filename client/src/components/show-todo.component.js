@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-//import {Label} from 'reactstrap';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import moment from 'moment'
@@ -38,22 +37,7 @@ class ShowTodo extends Component {
         }
     }
     componentDidMount() {
-
-
-        // axios.get('https://clothmeasurement.herokuapp.com/users/')
-        //     .then(response => {
-        //         if (response.data.length > 0) {
-        //             this.setState({
-        //                 users: response.data.map(user => user.username),
-        //                 username: response.data[0].username
-        //             })
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     })
-
-        axios.get('http://localhost:5000/todos' || 'https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
+        axios.get('http://localhost:5000/todos/list/' || 'https://clothmeasurement.herokuapp.com/todos/list/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     username: response.data.username,
@@ -90,13 +74,13 @@ class ShowTodo extends Component {
     onSubmit(e) {
         e.preventDefault();
         // Open the Homepage   
-        window.location = '/';
+        window.location = '/list';
 
     }
     render() {
 
         const { auth } = this.props;
-        if (!auth.uid) return <Redirect to='/signin' />
+        if (!auth.uid) return <Redirect to='/' />
         return (
             <div>
                 <h3 align="center">Show Customer Data</h3>
