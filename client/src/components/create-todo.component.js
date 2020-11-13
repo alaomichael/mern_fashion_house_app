@@ -67,19 +67,6 @@ owneremail:this.props.owneremail
 
 componentDidMount() {
 this.toggle();
-   
-axios.get('http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/' )
-.then(response => {
-if (response.data.length > 0) {
-this.setState({
-users: response.data.map(user => user.username),
-username: response.data[0].username
-})
-}
-})
-.catch((error) => {
-console.log(error);
-})
 }
 
 onChangeUsername(e) {
@@ -241,28 +228,10 @@ users: this.state.users,
 owneremail:this.state.owneremail
 };
 
-// const objects = [{
-//     firstname: 'Jimmie',
-//     lastname: 'Barninger'
-// }, {
-//     firstname: 'Warren',
-//     lastname: 'Speach'
-// }];
-
-// const index = 'prod_NAME';
-
-//index
-//.saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
-//.then(({ objectIDs }) => {
-//console.log(objectIDs);
-//});
-
 // Set localstorage
 this.setData(newTodo);
-
-axios.post('http://localhost:5000/todos/add'  || 'https://clothmeasurement.herokuapp.com/todos/add', newTodo)
+axios.post('https://clothmeasurement.herokuapp.com/todos/add' , newTodo)
 .then(res => console.log(res.data));
-//  || 'https://clothmeasurement.herokuapp.com/todos/add'
 
 // Close modal
 this.toggle();
@@ -300,21 +269,16 @@ todo_priority: '',
 todo_completed: false,
 owneremail: this.props.owneremail
 });
-
-console.log(this.state.owneremail);
-
 // Refresh the page to show the new update
 window.location = '/';
-
-// Return to the previous page
-//this.props.history.push('/');
 
 // Get localstorage
 //this.getData();
 }
+
 render() {
 const { auth } = this.props;
-if (!auth.uid) return <Redirect to='/' />
+if (!auth.uid) return <Redirect to='/home' />
 return (
 <div style={ { marginTop: 10 } }>
 <h4 align="center" >
@@ -476,7 +440,7 @@ onChange={ this.onChange }
 { this.state.image && <img src={ this.state.url } height="100" width="100" alt="cloth_style" /> }
 <br />
 <label>Progress: </label>
-<p>{ this.state.progress }</p>
+<p>{ this.state.progress }{`%`}</p>
 <br />
 <br />
 <FileUploader
@@ -517,45 +481,44 @@ value={ this.state.todo_responsible }
 onChange={ this.onChange }
 />
 </div>
-   <div className="form-group">
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input"
-                                            type="radio"
-                                            name="priorityOptions"
-                                            id="priorityLow"
-                                            value="Low"
-                                            checked={ this.state.todo_priority === 'Low' }
-                                            onChange={ this.onChangeTodoPriority }
-                                        />
-                                        <label className="form-check-label">Low</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input"
-                                            type="radio"
-                                            name="priorityOptions"
-                                            id="priorityMedium"
-                                            value="Medium"
-                                            checked={ this.state.todo_priority === 'Medium' }
-                                            onChange={ this.onChangeTodoPriority }
-                                        />
+<div className="form-group">
+<div className="form-check form-check-inline">
+<input className="form-check-input"
+type="radio"
+name="priorityOptions"
+id="priorityLow"
+value="Low"
+checked={ this.state.todo_priority === 'Low' }
+onChange={ this.onChangeTodoPriority }
+/>
+<label className="form-check-label">Low</label>
+</div>
+<div className="form-check form-check-inline">
+<input className="form-check-input"
+type="radio"
+name="priorityOptions"
+id="priorityMedium"
+value="Medium"
+checked={ this.state.todo_priority === 'Medium' }
+onChange={ this.onChangeTodoPriority }
+/>
 
-                                        <label className="form-check-label">Medium</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input"
-                                            type="radio"
-                                            name="priorityOptions"
-                                            id="priorityHigh"
-                                            value="High"
-                                            checked={ this.state.todo_priority === 'High' }
-                                            onChange={ this.onChangeTodoPriority }
-                                        />
-                                        <label className="form-check-label">High</label>
-                                    </div>
-                                </div>
-                                <div className="form-group">
+<label className="form-check-label">Medium</label>
+</div>
+<div className="form-check form-check-inline">
+<input className="form-check-input"
+type="radio"
+name="priorityOptions"
+id="priorityHigh"
+value="High"
+checked={ this.state.todo_priority === 'High' }
+onChange={ this.onChangeTodoPriority }
+/>
+<label className="form-check-label">High</label>
+</div>
+</div>
+<div className="form-group">
 <input type="submit" value="Create Measurement" className="btn btn-success" />
-
 </div>
 </FormGroup>
 </Form>
