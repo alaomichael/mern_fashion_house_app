@@ -420,7 +420,7 @@ class EditTodo extends Component {
                                 { this.state.image && <img src={ this.state.url } height="150" width="150" /> }
                                 <br />
                                 <label>Progress: </label>
-                                <p>                 { this.state.progress }</p>
+                                <p>                 { this.state.progress }{`%`}</p>
                                 <br />
                                 <br />
                                 <FileUploader
