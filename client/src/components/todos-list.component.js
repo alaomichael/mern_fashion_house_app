@@ -18,13 +18,13 @@ const Todo = (props) => (
 <img src={ props.todo.url || props.todo.image || 'https://via.placeholder.com/150' } alt="Uploaded Style" height="150" width="150" />
 </td>            
 <td>{ moment(props.todo.date).fromNow() }</td>
-<Link to={ "/list/show/" + props.todo._id }>
+<Link to={ "/show/" + props.todo._id }>
 <Button
 className="btn btn-success"
 >Show</Button>
 </Link>
 { ` | ` }
-<Link to={ "/list/edit/" + props.todo._id }>
+<Link to={ "/edit/" + props.todo._id }>
 <Button className='btn btn-primary'
 >Edit</Button>
 </Link>
@@ -50,10 +50,8 @@ loading: false,
 currentPage: 1,
 todosPerPage: 5,
 owneremail: owneremail,
-search: '',
 word: '',
 phone:0,
-filtered:[],
 initialTodos:[]
 };  
 } 
@@ -72,8 +70,7 @@ initialTodos:[]
 
 componentDidMount() {
 const firebaseuser = this.props.auth.email;
-//const firebaseuser = "youremail@gmail.com";
-axios.get('http://localhost:5000/todos/list/?owneremail=' + firebaseuser)
+axios.get('https://clothmeasurement.herokuapp.com/todos/?owneremail=' + firebaseuser)
 .then(response => {
 console.log(response.data);
 this.setState({
@@ -84,19 +81,6 @@ initialTodos:response.data
 });
 })
 .catch(function (error) {
-console.log(error);
-})
-
-// Get Username
-axios.get('http://localhost:5000/users/' || 'https://clothmeasurement.herokuapp.com/users/')
-.then(response => {
-if (response.data.length > 0) {
-this.setState({
-users: response.data.map(user => user.username)
-})
-}
-})
-.catch((error) => {
 console.log(error);
 })
 
@@ -111,14 +95,13 @@ const currentTodos = initialTodos.length > todos.length ? (todos.slice(indexOfFi
 // Delete Button Link
 let onDeleteClick;
 onDeleteClick = _id => {
-//https://clothmeasurement.herokuapp.com
-axios.delete('http://localhost:5000/todos/list/delete/' + _id)
+axios.delete('https://clothmeasurement.herokuapp.com/todos/delete' + _id)
 .then(res => console.log(res.data));
 this.setState({
 exercises: this.state.todos.filter(el => el._id !== _id)
 })
 // Refresh the page to show the new list of todos after deleting 
-window.location = '/list';
+window.location = '/';
 };
 
 return currentTodos.map(function (currentTodo, i, _id) {
@@ -133,7 +116,7 @@ loading={loading}
 
 render() {
 const { auth } = this.props;
-if (!auth.uid) return <Redirect to='/' />
+if (!auth.uid) return <Redirect to='/home' />
 // Change page
 const paginate = pageNumber => this.setState({
 currentPage: pageNumber
@@ -144,7 +127,7 @@ const indexOfLastTodo = currentPage * todosPerPage;
 const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
 const currentTodos = initialTodos.length > todos.length ? (todos.slice(indexOfFirstTodo, indexOfLastTodo)) : (initialTodos.slice(indexOfFirstTodo, indexOfLastTodo) );
 const handleRefresh = e => {
-window.location = '/list';
+window.location = '/';
 }
 
 const handleChange = e => {
@@ -156,8 +139,6 @@ let oldList = todos;
 //   .map(todo => {
 //         return {name:todo.name,email:todo.email,...todo};
 //     });
-console.log(oldList);
-console.log(oldestList);
 if (word !== ""){
 let newList = [];
 
@@ -166,10 +147,6 @@ console.log(word.valueOf());
 newList = oldList.filter( todo => 
      todo.name.includes(word)  || todo.email.includes(word) 
  );
-console.log(newList);
-console.log(oldestList);
-console.log(oldList);
-console.log(initialTodos);
 
 this.setState({
 todos: newList
@@ -186,7 +163,7 @@ return (
 <Filter value={word} 
 handleRefresh={handleRefresh} 
 handleChange={e => handleChange(e.target.value)} />   
-<h3>Customers Measurement List</h3>
+<h3>Customers Measurement Records</h3>
 <table className="table table-striped"
 style={ { marginTop: 20 } } >
 <thead>
