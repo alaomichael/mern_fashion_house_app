@@ -8,9 +8,6 @@ require('dotenv').config();
 const helmet = require('helmet');
 
 app.use(helmet());
-//const config = require('config');
-// DB Config
-//const db = config.get('mongoURI');
 
 // Route setup
 const todoRoutes = express.Router();
@@ -26,7 +23,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Offline and Online database
-mongoose.connect(process.env.MONGODB_URI || LOCALDB, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect( LOCALDB || process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection is established successfully");
@@ -85,7 +82,7 @@ class APIfeatures {
         return this;
     }
     sorting() {
-        if (this.queryString.sort) {
+        if (this.queryString.sort){
             const sortby = this.queryString.sort.split(',').join(' ');
             this.query = this.query.sort(sortby);
         } else {
@@ -103,7 +100,7 @@ class APIfeatures {
 }
 
 
-//Home Route
+//Customer List Route
 todoRoutes.route('/').get(function (req, res) {
     let query = req.query;
     Todo.find(query, function (err, todos) {
@@ -112,38 +109,42 @@ todoRoutes.route('/').get(function (req, res) {
         } else {
             res.json(todos);
         }
-    }).sort({ name : 1 });
+    }).sort({ date : -1 }).catch(err => {
+        res.status(400).send("Unable to Show All Customer Data from Home");
+    });
 });
 
-// Customer List Route
-todoRoutes.route('/list').get(function (req, res) {
+
+// Home Route
+todoRoutes.route('/home').get(function (req, res) {
     const query = req.query;
+    console.log(query);
     Todo.find(query, function (err, todos) {
         if (err) {
             console.log(err);
         } else {
             res.json(todos);
         }
-    }).sort({ date : -1 });
+    }).sort({ date : -1 }).catch(err => {
+        res.status(400).send("Unable to Show All Customer Data");
+    });
 });
 
-todoRoutes.route('/list/:id').get(function (req, res) {
+todoRoutes.route('/:id').get(function (req, res) {
     let id = req.params.id;
-    // console.log(id);
     Todo.findById(id, function (err, todo) {
         res.json(todo);
     });
 });
 
-// Show list Route
-todoRoutes.route('/list/show/:id').get(function (req, res) {
+todoRoutes.route('/show/:id').get(function (req, res) {
     let id = req.params.id;
     Todo.findById(id, function (err, todo, user) {
         res.json(todo, user);
     });
 });
-//Delete Route
-todoRoutes.route('/list/delete/:id').delete(function (req, res) {
+
+todoRoutes.route('/delete/:id').delete(function (req, res) {
     let id = req.params.id;
     Todo.findByIdAndDelete(id, function (err, todo) {
         res.json(todo);
@@ -152,13 +153,12 @@ todoRoutes.route('/list/delete/:id').delete(function (req, res) {
     });
 });
 
-// Update Route
 todoRoutes.route('/update/:id').post(function (req, res) {
     Todo.findById(req.params.id, function (err, todo) {
         if (!todo)
             res.status(404).send("data is not found");
         else
-            todo.username = req.body.username;
+        todo.username = req.body.username;
         todo.name = req.body.name;
         todo.phone = req.body.phone;
         todo.email = req.body.email;
@@ -192,7 +192,6 @@ todoRoutes.route('/update/:id').post(function (req, res) {
     });
 });
 
-// Add Measurement Route
 todoRoutes.route('/add').post(function (req, res) {
     let todo = new Todo(req.body);
     todo.save()
@@ -222,3 +221,4 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, function () {
     console.log("Server is running on Port: " + PORT);
 });
+
