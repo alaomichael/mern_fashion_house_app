@@ -13,7 +13,7 @@ app.use(helmet());
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
 
-const LOCALDB = 'mongodb://127.0.0.1:27017/mernfashionapp';
+//const LOCALDB = 'mongodb://127.0.0.1:27017/mernfashionapp';
 let Todo = require('./models/todo.model');
 let User = require('./models/user.model');
 
@@ -23,7 +23,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Offline and Online database
-mongoose.connect( LOCALDB || process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+mongoose.connect( process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
     console.log("MongoDB database connection is established successfully");
