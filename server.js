@@ -63,7 +63,6 @@ userRoutes.route('/add').post((req, res) => {
 });
 
 //Advance Filtering & Pagination
-
 class APIfeatures {
     constructor(query, queryString) {
         this.query = query;
