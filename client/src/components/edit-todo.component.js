@@ -58,7 +58,8 @@ class EditTodo extends Component {
             todo_responsible: '',
             todo_priority: '',
             todo_completed: false,
-            users: []
+            users: [],
+            owneremail: ''
         }
     }
     componentDidMount() {
@@ -70,6 +71,7 @@ class EditTodo extends Component {
                     name: response.data.name,
                     phone: response.data.phone,
                     email: response.data.email,
+                    owneremail: response.data.owneremail,
                     underbust: response.data.underbust,
                     hip: response.data.hip,
                     length: response.data.length,
@@ -97,18 +99,6 @@ class EditTodo extends Component {
                 console.log(error);
             })
 
-        // Get Username
-        axios.get('https://clothmeasurement.herokuapp.com/users/')
-            .then(response => {
-                if (response.data.length > 0) {
-                    this.setState({
-                        users: response.data.map(user => user.username)
-                    })
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
 
         // Open Modal
         this.openModal();
@@ -130,7 +120,7 @@ class EditTodo extends Component {
 
     }
 
-// To show image upload progress
+    // To show image upload progress
     handleUploadStart = () => {
         this.setState({
             progress: 0
@@ -260,8 +250,8 @@ class EditTodo extends Component {
             todo_completed: this.state.todo_completed
         };
         console.log(obj);
-        //'https://clothmeasurement.herokuapp.com/todos/update/'
-        axios.post('http://localhost:5001/todos/update/' + this.props.match.params.id, obj)
+        //||  
+        axios.post('https://clothmeasurement.herokuapp.com/todos/update/' + this.props.match.params.id, obj)
             .then(res => console.log(res.data));
         // Open the Homepage   
         window.location = '/';
@@ -269,7 +259,7 @@ class EditTodo extends Component {
     }
     render() {
         const { auth } = this.props;
-        if (!auth.uid) return <Redirect to='/signin' />
+        if (!auth.uid) return <Redirect to='/home' />
         return (
 
             <div style={ { marginTop: 10 } }>
@@ -286,7 +276,7 @@ class EditTodo extends Component {
                     <ModalBody>
                         <Form onSubmit={ this.onSubmit }>
                             <FormGroup>
-                              
+
                                 <Label for='item'>Name</Label>
                                 <Input
                                     type='text'
@@ -431,7 +421,7 @@ class EditTodo extends Component {
                                 { this.state.image && <img src={ this.state.url } height="150" width="150" /> }
                                 <br />
                                 <label>Progress: </label>
-                                <p>                 { this.state.progress }</p>
+                                <p>                 { this.state.progress }{`%`}</p>
                                 <br />
                                 <br />
                                 <FileUploader
@@ -537,10 +527,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         updateProject: (project) => dispatch(updateProject(project))
-//         //createUsername: (username) => dispatch(createUsername(username))
-//     }
-// }
 export default connect(mapStateToProps)(EditTodo);

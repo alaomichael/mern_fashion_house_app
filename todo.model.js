@@ -4,6 +4,9 @@ let Todo = new Schema({
     username: {
 type: String
 },
+   owneremail: {
+type: String
+},
  users: {
 type: Array
 },

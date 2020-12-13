@@ -90,7 +90,10 @@ type: Array
     },
     date: {
         type: Date
-    }
+    },
+     userId: {
+         type: String
+        }
 });
 
 module.exports = mongoose.model('Todo', Todo);

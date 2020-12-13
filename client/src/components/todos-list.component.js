@@ -63,20 +63,10 @@ localtodos:[]
 //     };
 
 componentDidMount() {
-    
-// Get local Storage Data
-//this.getData();
-
-//Get the Customers data based on the owneremail query
-
-//const firebaseuser = this.props.auth.email;
-// let firebaseuser = 'contactleomax@gmail.com';
-//  axios.get('https://clothmeasurement.herokuapp.com/todos/?owneremail=' + firebaseuser)
-
-let firebaseuser = 'leomax@gmail.com';
-//const firebaseuser = this.props.auth.email;
-axios.get('http://localhost:5000/todos/?owneremail=' + firebaseuser)
+const firebaseuser = this.props.auth.email;
+axios.get('https://clothmeasurement.herokuapp.com/todos/?owneremail=' + firebaseuser)
 .then(response => {
+console.log(response.data);
 this.setState({
 todos: response.data,
 username: response.data.username,
