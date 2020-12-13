@@ -1,24 +1,3 @@
-// import React from 'react'
-// import { Link } from 'react-router-dom';
-
-
-// const SignedInLinks = () => {
-//   return (
-//     <>
-//           <ul className="right navbar-nav mr-auto">
-//               <li className="navbar-item">
-//                   <Link to="/" className="nav-link">Log Out</Link>
-//               </li>
-//               <li className="navbar-item">
-//                   <Link to="/" className="nav-link">F&LName</Link>
-//               </li>
-//       </ul>
-//     </>
-//   )
-// }
-
-// export default SignedInLinks
-
 import React from 'react';
 import { NavLink,Link } from 'react-router-dom';
 import { connect } from 'react-redux'
@@ -35,13 +14,13 @@ const SignedInLinks = (props) => {
       <ul className="navbar-nav mr-auto">
         <li> <Link to="/" className="navbar-brand brand-logo">Measurement App</Link></li>
         <li className="navbar-item">
-          <Link to="/user" className="nav-link">Create User</Link>
+          <Link to="/create" className="nav-link">Add Customer Data</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/create" className="nav-link">Create Customer Data</Link>
+          <Link to="/" className="nav-link">Show Customers Data</Link>
         </li>
         <li className="navbar-item">
-          <Link to="/" className="nav-link">Customers Data</Link>
+          <Link to="/contactus" className="nav-link">Contact Us</Link>
         </li>
         <li><Link className="nav-link" onClick={ props.signOut }>
           Log Out

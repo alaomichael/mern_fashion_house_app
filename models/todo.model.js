@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 let Todo = new Schema({
-
+       loading: {
+        type: Boolean
+    },
+    currentPage: {
+        type: Number
+    },
+    todosPerPage: {
+        type: Number
+    },
   username: {
         type: String
     },
@@ -55,6 +63,9 @@ type: Array
     },
     email: {
         type: String, required: true
+    },
+     owneremail: {
+        type: String
     },
     bust: {
         type: Number

@@ -42,6 +42,13 @@ this.toggle();
 }
 render() {
 const { authError, auth } = this.props;
+
+// I just added this line on October 14 2020 to test restricted route
+ const { from } = this.props.location.state || { from: { pathname: '/' } }
+
+  if (this.state.redirect === true) {
+    return <Redirect to={from} />
+  }
 // Redirect to the signin page if user has not login
 if (auth.uid) return <Redirect to='/' />
 return (

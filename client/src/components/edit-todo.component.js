@@ -62,7 +62,8 @@ class EditTodo extends Component {
         }
     }
     componentDidMount() {
-        axios.get('https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
+        //|| 'https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id
+        axios.get('http://localhost:5001/todos/' + this.props.match.params.id )
             .then(response => {
                 this.setState({
                     username: response.data.username,
@@ -84,8 +85,9 @@ class EditTodo extends Component {
                     skirt_waist: response.data.skirt_waist,
                     bust: response.data.bust,
                     image: response.data.image,
+                    date: new Date(response.data.date),
                     url: response.data.url,
-                    date: new Date(response.data.date), todo_description: response.data.todo_description,
+                    todo_description: response.data.todo_description,
                     todo_responsible: response.data.todo_responsible,
                     todo_priority: response.data.todo_priority,
                     todo_completed: response.data.todo_completed
@@ -126,6 +128,19 @@ class EditTodo extends Component {
 
         this.toggle();
 
+    }
+
+// To show image upload progress
+    handleUploadStart = () => {
+        this.setState({
+            progress: 0
+        })
+    }
+
+    handleProgress = progress => {
+        this.setState({
+            progress: progress
+        })
     }
 
     //To show uploaded style
@@ -245,7 +260,8 @@ class EditTodo extends Component {
             todo_completed: this.state.todo_completed
         };
         console.log(obj);
-        axios.post('https://clothmeasurement.herokuapp.com/todos/update/' + this.props.match.params.id, obj)
+        //'https://clothmeasurement.herokuapp.com/todos/update/'
+        axios.post('http://localhost:5001/todos/update/' + this.props.match.params.id, obj)
             .then(res => console.log(res.data));
         // Open the Homepage   
         window.location = '/';
@@ -414,11 +430,17 @@ class EditTodo extends Component {
                                 </div>
                                 { this.state.image && <img src={ this.state.url } height="150" width="150" /> }
                                 <br />
+                                <label>Progress: </label>
+                                <p>                 { this.state.progress }</p>
+                                <br />
+                                <br />
                                 <FileUploader
                                     accept="image/*"
                                     name="image"
                                     storageRef={ firebase.storage().ref('avatars') }
+                                    onUploadStart={ this.handleUploadStart }
                                     onUploadSuccess={ this.handleUploadSuccess }
+                                    onProgress={ this.handleProgress }
                                 />
 
                                 <div className="form-group">

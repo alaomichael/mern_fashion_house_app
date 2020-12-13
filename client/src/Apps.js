@@ -18,10 +18,8 @@ function Apps() {
             <div className="App">
                 <NavBar />
                 <Switch>
-
-<Route path="/edit/:id" component={EditTodo} /> 
-
-<Route path="/user" component={ CreateUser } /> 
+                    <Route path="/edit/:id" component={EditTodo} /> 
+                    <Route path="/user" component={ CreateUser } /> 
                     <Route exact path='/' component={ Dashboard } />
                     <Route path='/project/:id' component={ ProjectDetails } />
                     <Route path='/signin' component={ SignIn } />

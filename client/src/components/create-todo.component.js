@@ -18,12 +18,29 @@ import { storage } from '../config/firebaseConfig'
 import FileUploader from 'react-firebase-file-uploader';
 import firebase from 'firebase';
 //import ImageUpload from './imageUpload';
+//import algoliasearch from 'algoliasearch';
+
+// For the default version
+// const algoliasearch = require('algoliasearch');
+
+// For the default version
+import algoliasearch from 'algoliasearch';
+
+// For the search only version
+//import algoliasearch from 'algoliasearch/lite';
+
+// ALGOLIASEARCH_API_KEY= 086d662d9db57ab4d6626fc0185b390c
+// ALGOLIASEARCH_API_KEY_SEARCH = 107c357448ef5abcbe25148fa6ed2628
+// ALGOLIASEARCH_APPLICATION_ID = DDIJI46JBP
+
+const client = algoliasearch(process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY);
+const index = client.initIndex('customer_data');
 
 
 class CreateList extends Component {
     constructor(props) {
         super(props);
-
+                
         this.onChangeTodoDescription = this.onChangeTodoDescription.bind(this);
         this.onChangeTodoResponsible = this.onChangeTodoResponsible.bind(this);
         this.onChangeTodoPriority = this.onChangeTodoPriority.bind(this);
@@ -61,14 +78,18 @@ class CreateList extends Component {
             todo_responsible: '',
             todo_priority: '',
             todo_completed: false,
-            users: []
+            users: [],
+            owneremail:this.props.owneremail
         }
+
+        console.log(this.state.owneremail);
     }
 
     componentDidMount() {
         this.toggle();
+        // 'https://clothmeasurement.herokuapp.com/users/'
 
-        axios.get('https://clothmeasurement.herokuapp.com/users/')
+        axios.get('http://localhost:5000/users/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -123,38 +144,17 @@ class CreateList extends Component {
         });
     };
 
-    // handleImageChange = e => {
-    //     if (e.target.files[0]) {
-    //         const image = e.target.files[0];
-    //         this.setState(() => ({image}));
-    //     }
-    // }
+     handleUploadStart = () => {
+        this.setState({
+            progress: 0
+        })
+    }
 
-
-    // handleUpload = () => {
-
-    //         const {image} =this.state;
-    //         const uploadTask = storage.ref(`images/styles/${image.name}`).put(image);
-    //         uploadTask.on('state_change',
-    //         (snapshot) => {
-    //             // progress function
-    //             console.log(snapshot);
-
-    //         },
-    //         (error) => {
-    //             // Error function
-    //             console.log(error);
-
-    //         },
-    //         () => {
-    //             // complete function
-    //             storage.ref('images/styles').child(image.name).getDownloadURL.then(url => {
-    //                 this.setState({url});
-    //             })
-    //         }
-    //         )
-
-    // }
+    handleProgress = progress => {
+        this.setState({
+            progress: progress
+        })
+    }
 
     handleUploadSuccess = filename => {
         this.setState({
@@ -201,17 +201,36 @@ class CreateList extends Component {
 
     }
 
+    setData = (newData) => {
+    //set data with localstorage
+// let obj =  {name: "Tunde", age: 34, email: "contactleomax@gmail.com"} 
+// localStorage.setItem('myData', JSON.stringify(obj));
+localStorage.setItem('myData', JSON.stringify(newData));
+}
+
+getData = () => {
+    let data = localStorage.getItem('myData');
+    data = JSON.parse(data);
+    console.log(data);
+    this.setState(data);
+}
+
+setSessionData = (newData) => {
+    //set data with sessionstorage
+// let obj =  {name: "Esther", age: 34, email: "estheralao@gmail.com"} 
+// sessionStorage.setItem('mySessionData', JSON.stringify(obj));
+sessionStorage.setItem('mySessionData', JSON.stringify(newData));
+}
+
+getSessionData = () => {
+    let data = sessionStorage.getItem('mySessionData');
+    data = JSON.parse(data);
+    console.log(data);
+    this.setState(data);
+}
 
     onSubmit(e) {
         e.preventDefault();
-
-        console.log(`Form submitted: True`);
-        console.log(`Todo Description: ${this.state.todo_description}`);
-        console.log(`Todo Responsible: ${this.state.todo_responsible}`);
-        console.log(`Todo Priority: ${this.state.todo_priority}`);
-        console.log(`Todo Url: ${this.state.url}`);
-        console.log(`Todo Image name: ${this.state.image}`);
-        console.log(`Todo Created on: ${Date.now}`);
 
         const newTodo = {
             username: this.state.username,
@@ -239,15 +258,47 @@ class CreateList extends Component {
             todo_responsible: this.state.todo_responsible,
             todo_priority: this.state.todo_priority,
             todo_completed: this.state.todo_completed,
-            users: this.state.users
+            users: this.state.users,
+            owneremail:this.state.owneremail
         };
 
-        axios.post('https://clothmeasurement.herokuapp.com/todos/add', newTodo)
+        const objects = [{
+            firstname: 'Jimmie',
+            lastname: 'Barninger'
+        }, {
+            firstname: 'Warren',
+            lastname: 'Speach'
+        }];
+
+// const index = 'prod_NAME';
+
+        index
+            .saveObjects(newTodo, { autoGenerateObjectIDIfNotExist: true })
+            .then(({ objectIDs }) => {
+                console.log(objectIDs);
+            });
+
+// Set localstorage
+            this.setData(newTodo);
+
+        axios.post('http://localhost:5000/todos/add', newTodo)
             .then(res => console.log(res.data));
+            //  || 'https://clothmeasurement.herokuapp.com/todos/add'
 
         // Close modal
         this.toggle();
 
+        console.log(`Form submitted: True`);
+        console.log(`Todo Description: ${this.state.todo_description}`);
+        console.log(`Todo Responsible: ${this.state.todo_responsible}`);
+        console.log(`Todo Priority: ${this.state.todo_priority}`);
+        console.log(`Todo Url: ${this.state.url}`);
+        console.log(`Todo Image name: ${this.state.image}`);
+        console.log(`Todo Created on: ${Date.now}`);
+        console.log(`Owner Eamil: ${this.state.owneremail}`);
+
+
+// Clear the form content
         this.setState({
             modal: false,
             username: '',
@@ -275,8 +326,11 @@ class CreateList extends Component {
             todo_description: '',
             todo_responsible: '',
             todo_priority: '',
-            todo_completed: false
-        })
+            todo_completed: false,
+            owneremail: this.props.owneremail
+        });
+
+         console.log(this.state.owneremail);
 
         // Refresh the page to show the new update
         window.location = '/';
@@ -284,10 +338,12 @@ class CreateList extends Component {
         // Return to the previous page
         //this.props.history.push('/');
 
+        // Get localstorage
+        this.getData();
     }
     render() {
         const { auth } = this.props;
-        if (!auth.uid) return <Redirect to='/signin' />
+     //   if (!auth.uid) return <Redirect to='/signin' />
         return (
             <div style={ { marginTop: 10 } }>
                 <h4 align="center" >
@@ -305,7 +361,7 @@ class CreateList extends Component {
                     <ModalBody>
                         <Form onSubmit={ this.onSubmit }  >
                             <FormGroup>
-                                                             <Label for='item'>*Name: </Label>
+                                <Label for='item'>*Name: </Label>
                                 <Input
                                     type='text'
                                     name='name'
@@ -444,14 +500,21 @@ class CreateList extends Component {
 
                                 <div className="form-group">
                                     <Label for='image'>Style:  </Label>
+                                    <p><b>Please ensure that the picture you want to upload show before you submit the form!</b></p>
                                 </div>
                                 { this.state.image && <img src={ this.state.url } height="100" width="100" /> }
+                                <br />
+                                <label>Progress: </label>
+                                <p>                 { this.state.progress }</p>
+                                <br />
                                 <br />
                                 <FileUploader
                                     accept="image/*"
                                     name="image"
                                     storageRef={ firebase.storage().ref('avatars') }
+                                    onUploadStart={ this.handleUploadStart }
                                     onUploadSuccess={ this.handleUploadSuccess }
+                                    onProgress={ this.handleProgress }
                                 />
 
                                 <div className="form-group">
@@ -516,7 +579,7 @@ class CreateList extends Component {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <input type="submit" value="Create Measurement" className="btn btn-success" />
+                                    <input type="submit" value="Add Measurement" className="btn btn-success" />
 
                                 </div>
                             </FormGroup>
@@ -529,17 +592,17 @@ class CreateList extends Component {
 }
 
 
-
 const mapStateToProps = (state) => {
     return {
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        owneremail: state.firebase.auth.email
     }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         createProject: (project) => dispatch(createProject(project))
-//         //createUsername: (username) => dispatch(createUsername(username))
-//     }
-// }
+const mapDispatchToProps = (dispatch) => {
+    return { 
+        //createProject: (project) => dispatch(createProject(project))
+        //createUsername: (username) => dispatch(createUsername(username))
+    }
+}
 export default connect(mapStateToProps)(CreateList);

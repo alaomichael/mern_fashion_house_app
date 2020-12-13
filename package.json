@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "algoliasearch": "^4.2.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^3.6.1",
     "config": "^3.3.1",
@@ -28,7 +29,13 @@
     "express": "^4.17.1",
     "forever": "^3.0.0",
     "helmet": "^3.22.0",
+    "is-empty": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
-    "react-instantsearch-dom": "^6.5.0"
+    "nodemailer": "^6.4.13",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "react-instantsearch-dom": "^6.5.0",
+    "validator": "^13.0.0"
   }
 }

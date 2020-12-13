@@ -1,28 +1,34 @@
 
 import React from 'react';
+import './Search.css'
 import algoliasearch from 'algoliasearch'
 import { InstantSearch, SearchBox, Hits, Highlight, Stats, SortBy, Pagination } from 'react-instantsearch-dom';
 
 
-const searchClient = algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76")
-
+const searchClient = algoliasearch("DDIJI46JBP", "086d662d9db57ab4d6626fc0185b390c")
 
 function Search() {
 
     return (
-        < InstantSearch searchClient={searchClient} indexName="movies" >
+        <>
+        < InstantSearch searchClient={searchClient} indexName="prod_NAME" >
             <Header />
             <div className="body-content">
                 <Content/>
             </div>
         </InstantSearch >
+        <InstantSearch searchClient={ searchClient } indexName="prod_NAME">
+            <SearchBox />
+            <Hits />
+        </InstantSearch>
+        </>
     );        
 };
 const Header = () => (
     <header className="header">
         <SearchBox
             className="search-bar"
-            translations={{ placeholder: 'Search for Movies' }}
+            translations={{ placeholder: 'Search for Customer Data' }}
         />
     </header>
 );

@@ -27,6 +27,7 @@ class ShowTodo extends Component {
             blouse_length: '',
             skirt_waist: '',
             email: '',
+            owneremail:'',
             bust: '',
             date: '',
             image: '',
@@ -53,13 +54,16 @@ class ShowTodo extends Component {
         //         console.log(error);
         //     })
 
-        axios.get('https://clothmeasurement.herokuapp.com/todos/' + this.props.match.params.id)
+        //|| 'https://clothmeasurement.herokuapp.com/todos/' 
+        axios.get('http://localhost:5001/todos/' + this.props.match.params.id)
             .then(response => {
+                console.log(response.data);
                 this.setState({
                     username: response.data.username,
                     name: response.data.name,
                     phone: response.data.phone,
                     email: response.data.email,
+                    owneremail: response.data.owneremail,
                     underbust: response.data.underbust,
                     hip: response.data.hip,
                     length: response.data.length,
@@ -96,7 +100,8 @@ class ShowTodo extends Component {
     render() {
 
         const { auth } = this.props;
-        if (!auth.uid) return <Redirect to='/signin' />
+        const {length} = this.state;
+        if (!auth.uid) return <Redirect to='/home' />
         return (
             <div>
                 <h3 align="center">Show Customer Data</h3>
@@ -134,7 +139,7 @@ class ShowTodo extends Component {
                                 <tr>
                                     <td> Length: </td>
                                     <td>
-                                        { this.state.length }</td>
+                                        { length }</td>
                                 </tr>
                                 <tr>
                                     <td> Waist: </td>
@@ -282,7 +287,8 @@ class ShowTodo extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        owneremail: state.firebase.auth.email
     }
 }
 

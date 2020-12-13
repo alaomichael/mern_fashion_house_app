@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
-
+const nodemailer = require('nodemailer');
 const helmet = require('helmet');
 
 app.use(helmet());
@@ -44,7 +44,7 @@ const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op0
 const todoRoutes = express.Router();
 const userRoutes = express.Router();
 // const MONGODB_URI = "mongodb+srv://alaomichael:babatunde2@measurementcluster-op09y.gcp.mongodb.net/test?retryWrites=true&w=majority";
-// const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
+const LOCALDB = 'mongodb://127.0.0.1:27017/fha';
 let Todo = require('./models/todo.model');
 let User = require('./models/user.model');
 
@@ -71,6 +71,7 @@ let User = require('./models/user.model');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 // Offline Database
 // mongoose.connect('mongodb://127.0.0.1:27017/fha', { useNewUrlParser: true, useCreateIndex: true });
@@ -81,12 +82,20 @@ app.use(bodyParser.json());
 
 
 //Online database
-mongoose.connect(
-    process.env.MONGOLAB_PURPLE_URI || process.env.MONGODB_URI || MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+// mongoose.connect( 
+//     process.env.MONGOLAB_PURPLE_URI || process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+// const connection = mongoose.connection;
+// connection.once('open', function () {
+//     console.log("MongoDB database connection established successfully");
+// }) process.env.
+
+// Offline and Online database
+mongoose.connect( LOCALDB || process.env.MONGOLAB_URI || process.env.MONGODB_PURPLE_URI  , { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function () {
-    console.log("MongoDB database connection established successfully");
+    console.log("MongoDB database connection now established successfully");
 })
+
 
 //Allow all requests from all domains & localhost
 todoRoutes.all('/*', function (req, res, next) {
@@ -123,7 +132,21 @@ userRoutes.route('/add').post((req, res) => {
 
 // Customer Data Route
 todoRoutes.route('/').get(function (req, res) {
-    Todo.find(function (err, todos) {
+    const query = req.query;
+    console.log(query);
+    Todo.find(query,function (err, todos) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(todos);
+        }
+    });
+});
+
+todoRoutes.route('/home').get(function (req, res) {
+    const query = req.query;
+    console.log(query);
+    Todo.find(query,function (err, todos) {
         if (err) {
             console.log(err);
         } else {
@@ -134,6 +157,7 @@ todoRoutes.route('/').get(function (req, res) {
 
 todoRoutes.route('/:id').get(function (req, res) {
     let id = req.params.id;
+    console.log(id);
     Todo.findById(id, function (err, todo) {
         res.json(todo);
     });
@@ -142,6 +166,7 @@ todoRoutes.route('/:id').get(function (req, res) {
 // Just editted in case of any error
 todoRoutes.route('/show/:id').get(function (req, res) {
     let id = req.params.id;
+    console.log(id);
     Todo.findById(id, function (err, todo, user) {
         res.json(todo, user);
     });
@@ -162,7 +187,7 @@ todoRoutes.route('/update/:id').post(function (req, res) {
         if (!todo)
             res.status(404).send("data is not found");
         else
-            todo.username = req.body.username;
+        todo.username = req.body.username;
         todo.name = req.body.name;
         todo.phone = req.body.phone;
         todo.email = req.body.email;
@@ -207,6 +232,55 @@ todoRoutes.route('/add').post(function (req, res) {
         });
 });
 
+// Contact Us API link
+todoRoutes.route('/contactus').post(function (req, res) {
+    let data = req.body;
+    let smtpTransport = nodemailer.createTransport({
+        service:'Gmail',
+        port:465,
+        auth:{
+            user:process.env.EMAIL,
+            pass:process.env.PASSWORD
+        }
+    })
+        .then(msg => {
+            res.status(200).json({ 'msg': 'Message sent successfully' });
+        })
+        .catch(err => {
+            res.status(400).send('Sending message failed');
+        });
+
+        let mailOptions ={
+            from:data.email,
+            to:'clothmeasurement@gmail.com,contactleomax@gmail.com',
+            cc:'steadyincomes@gmail.com',
+            subject:`Message from ${data.name}`,
+            html:`
+            <h1 Information </h1>
+            <ul>
+            <li>Name: ${data.name}</li>
+            <li>Phone: ${data.phone}</li>
+            <li>Email: ${data.email}</li>
+            </ul>
+            <h3>Message</h3>
+
+<p>Message: ${data.message}</p>
+           `
+        };
+
+        smtpTransport.sendMail(mailOptions,(error,res)=>{
+    if(error){
+        res.send(error)
+    } else {
+res.send('Success')
+console.log('Message sent successfully to E-mail');
+    }
+})
+
+smtpTransport.close();
+});
+
+
 app.use('/todos', todoRoutes);
 app.use('/users', userRoutes);
 
@@ -220,7 +294,7 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-
+// process.env.PORT || 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, function () {
