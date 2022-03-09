@@ -21,7 +21,7 @@ const Copyright = (props) => {
 <a href="tel:+2347033680599">Click to Call Us Now</a>
         </div>
         <div >   
-Copyright 2020 {` `}  
+Copyright since 2020 {` `}  
 <a className="navbar-brand"  href="https://alaomichael.github.io" target="_blank" rel="noopener noreferrer">
 <img src={ logo } width="30" height="30" alt="Alao Michael" />{` `} 
 Leomax International</a>
