@@ -30,7 +30,7 @@
     "forever": "^3.0.0",
     "helmet": "^3.22.0",
     "is-empty": "^1.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.9.16",
     "nodemailer": "^6.4.13",
     "passport": "^0.4.1",
